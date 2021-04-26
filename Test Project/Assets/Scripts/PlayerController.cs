@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Collections;         //Viene importato lo spazio dei nomi per gestire le raccolte di oggetti
+using System.Collections.Generic; //Viene importato lo spazio dei nomi per l'utilizzo dei tipi generici
+using UnityEngine;                //Viene importato lo spazio dei nomi per gli oggetti principali di Unity
 
 /**
  * <summary>Contiene i metodi per il movimento e le azioni del player.</summary>
@@ -16,16 +16,16 @@ public class PlayerController : MonoBehaviour
     public float jumpStrength = 3.5f;    ///<value>Forza del salto.</value>
 
     /*Dichiarazione costanti*/
-    private const int firstJump = 1; //Definizione costante per l'indice di partenza del conteggio dei salti consecutivi
+    private const int firstJump = 1; ///<value>Definizione costante per l'indice di partenza del conteggio dei salti consecutivi.</value>
 
     /*Dichiarazione delle variabili d'istanza*/
-    private CharacterController controller; //Dichiarazione componente CharacterController
-    private Animator animator;              //Componente Animator per gestire le animazioni
-    private float speed = -1.0f;            //Dichiarazione e inizializzazione velocità
-    private float previousX = -1.0f;        //Dichiarazione e inizializzazione posizione a terra
-    private float previousY = -1.0f;        //Dichiarazione e inizializzazione posizione in aria
-    private float previousZ = -1.0f;        //Dichiarazione e inizializzazione posizione a terra
-    private int currentJump = firstJump;    //Dichiarazione e inizializzazione numero di salti consecutivi
+    private CharacterController controller; ///<value>Dichiarazione componente CharacterController.</value>
+    private Animator animator;              ///<value>Componente Animator per gestire le animazioni.</value>
+    private float speed = -1.0f;            ///<value>Dichiarazione e inizializzazione velocità.</value>
+    private float previousX = -1.0f;        ///<value>Dichiarazione e inizializzazione posizione a terra.</value>
+    private float previousY = -1.0f;        ///<value>Dichiarazione e inizializzazione posizione in aria.</value>
+    private float previousZ = -1.0f;        ///<value>Dichiarazione e inizializzazione posizione a terra.</value>
+    private int currentJump = firstJump;    ///<value>Dichiarazione e inizializzazione numero di salti consecutivi.</value>
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
             Move();    //Viene chiamato il metodo per il movimento
             Attack();  //Viene chiamato il metodo per l'attacco
         }
+
+        AdjustCollider(); //Correzione della posizione del collider
     }
 
     /**
@@ -174,5 +176,29 @@ public class PlayerController : MonoBehaviour
         bool userInput = Input.GetButtonDown("Fire1"); //Dichiarazione e inizializzazione variabile per l'input dell'utente
 
         animator.SetBool("attack", userInput); //Animazione del personaggio
+    }
+
+    /**
+     * <summary>Questo metodo si occupa di correggere la posizione del collider del Character Controller.</summary>
+     */
+    private void AdjustCollider()
+    {
+        /*Dichiarazione e inizializzazione variabile per contenere le informazioni sull'animazione corrente*/
+        AnimatorClipInfo[] currentAnimation = animator.GetCurrentAnimatorClipInfo(0);
+
+        switch (currentAnimation[0].clip.name) //Selezione dei valori del collider in base all'animazione
+        {
+            /*Si selezionano i valori del collider per l'animazione dell'attacco semplice*/
+            case "Attack01":
+                controller.radius = 0.68f;                             //Aggiornamento raggio collider
+                controller.center = new Vector3(-0.15f, 0.69f, 0.12f); //Aggiornamento posizione collider
+                break;                                                 //Interruzione del costrutto di selezione
+
+            /*Si selezionano i valori del collider per tutte le altre animazioni*/
+            default:
+                controller.radius = 0.65f;                          //Aggiornamento raggio collider
+                controller.center = new Vector3(0.0f, 0.66f, 0.0f); //Aggiornamento posizione collider
+                break;                                              //Interruzione del costrutto di selezione
+        }
     }
 }
