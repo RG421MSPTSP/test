@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
         {
             Move();    //Viene chiamato il metodo per il movimento
             Attack();  //Viene chiamato il metodo per l'attacco
+
+            SpecialAttack(); //Viene chiamato il metodo per il primo power-up
         }
 
         AdjustCollider(); //Correzione della posizione del collider
@@ -179,6 +181,19 @@ public class PlayerController : MonoBehaviour
     }
 
     /**
+     * <summary>Questo metodo gestisce l'attacco speciale e le animazioni a esso associate.</summary>
+     */
+    private void SpecialAttack()
+    {
+        bool userInput = Input.GetKeyUp("x"); //Dichiarazione e inizializzazione variabile per l'input dell'utente
+
+        if (userInput) //Si controlla che l'utente abbia premuto il tasto per attivare il power-up
+        {
+            animator.SetTrigger("specialAttack"); //Animazione del personaggio
+        }
+    }
+
+    /**
      * <summary>Questo metodo si occupa di correggere la posizione del collider del Character Controller.</summary>
      */
     private void AdjustCollider()
@@ -190,15 +205,42 @@ public class PlayerController : MonoBehaviour
         {
             /*Si selezionano i valori del collider per l'animazione dell'attacco semplice*/
             case "Attack01":
-                controller.radius = 0.68f;                             //Aggiornamento raggio collider
-                controller.center = new Vector3(-0.15f, 0.69f, 0.12f); //Aggiornamento posizione collider
-                break;                                                 //Interruzione del costrutto di selezione
+                controller.radius = 0.68f; //Aggiornamento raggio collider
+
+                /*Aggiornamento posizione collider*/
+                controller.center = new Vector3(
+                    -0.15f,
+                    controller.radius + controller.skinWidth,
+                    0.12f
+                );
+
+                break; //Interruzione del costrutto di selezione
+
+            /*Si selezionano i valori del collider per l'animazione dell'attacco speciale*/
+            case "Attack02":
+                controller.radius = 0.74f; //Aggiornamento raggio collider
+
+                /*Aggiornamento posizione collider*/
+                controller.center = new Vector3(
+                    -0.07f,
+                    controller.radius + controller.skinWidth,
+                    0.08f
+                );
+
+                break; //Interruzione del costrutto di selezione
 
             /*Si selezionano i valori del collider per tutte le altre animazioni*/
             default:
-                controller.radius = 0.65f;                          //Aggiornamento raggio collider
-                controller.center = new Vector3(0.0f, 0.66f, 0.0f); //Aggiornamento posizione collider
-                break;                                              //Interruzione del costrutto di selezione
+                controller.radius = 0.65f; //Aggiornamento raggio collider
+
+                /*Aggiornamento posizione collider*/
+                controller.center = new Vector3(
+                    0.0f,
+                    controller.radius + controller.skinWidth,
+                    0.0f
+                );
+
+                break; //Interruzione del costrutto di selezione
         }
     }
 }
