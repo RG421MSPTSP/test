@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 720.0f; ///<value>Velocità di rotazione.</value>
     public int totalJump = 2;            ///<value>Numero di salti consecutivi.</value>
     public float jumpStrength = 3.5f;    ///<value>Forza del salto.</value>
+    public GameObject shockWavePrefab;   ///<value>Riferimento al prefab dell'onda d'urto per l'attacco speciale.</value>
 
     /*Dichiarazione costanti*/
     private const int firstJump = 1; ///<value>Definizione costante per l'indice di partenza del conteggio dei salti consecutivi.</value>
@@ -190,6 +191,7 @@ public class PlayerController : MonoBehaviour
         if (userInput) //Si controlla che l'utente abbia premuto il tasto per attivare il power-up
         {
             animator.SetTrigger("specialAttack"); //Animazione del personaggio
+            StartCoroutine("shockWaveEffect");    //Creazione dell'onda d'urto
         }
     }
 
@@ -242,5 +244,25 @@ public class PlayerController : MonoBehaviour
 
                 break; //Interruzione del costrutto di selezione
         }
+    }
+
+    /**
+     * <summary>Questa coroutine mostra l'onda d'urto che segue l'attacco speciale.</summary>
+     */
+    IEnumerator shockWaveEffect()
+    {
+        const float waitingTime = 0.3f,  //Definizione costante per il tempo di attesa prima di mostrare l'onda d'urto
+                    wavePosition = 0.5f; //Definizione costante per la posizione in aria dell'onda d'urto
+
+        yield return new WaitForSeconds(waitingTime); //L'onda d'urto non viene mostrata subito
+
+        /*Viene istanziato il prefab dell'onda d'urto*/
+        GameObject specialEffect = Instantiate(
+
+            shockWavePrefab,
+            new Vector3(transform.position.x, transform.position.y + wavePosition, transform.position.z),
+            Quaternion.identity
+
+        ) as GameObject;
     }
 }
