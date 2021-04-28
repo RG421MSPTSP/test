@@ -8,13 +8,14 @@ using UnityEngine;                //Viene importato lo spazio dei nomi per gli o
 public class PlayerController : MonoBehaviour
 {
     /*Dichiarazione delle proprietà pubbliche*/
-    public float gravity = -9.81f;       ///<value>Valore della forza di gravità del mondo.</value>
-    public float walkingSpeed = 0.25f;   ///<value>Velocità durante lo spostamento.</value>
-    public float runningSpeed = 5.0f;    ///<value>Velocità durante la corsa.</value>
-    public float rotationSpeed = 720.0f; ///<value>Velocità di rotazione.</value>
-    public int totalJump = 2;            ///<value>Numero di salti consecutivi.</value>
-    public float jumpStrength = 3.5f;    ///<value>Forza del salto.</value>
-    public GameObject shockWavePrefab;   ///<value>Riferimento al prefab dell'onda d'urto per l'attacco speciale.</value>
+    public float gravity = -9.81f;             ///<value>Valore della forza di gravità del mondo.</value>
+    public float walkingSpeed = 0.25f;         ///<value>Velocità durante lo spostamento.</value>
+    public float runningSpeed = 5.0f;          ///<value>Velocità durante la corsa.</value>
+    public float rotationSpeed = 720.0f;       ///<value>Velocità di rotazione.</value>
+    public int totalJump = 2;                  ///<value>Numero di salti consecutivi.</value>
+    public float jumpStrength = 3.5f;          ///<value>Forza del salto.</value>
+    public PowerUp powerup = PowerUp.Disabled; ///<value>Power-up posseduto.</value>
+    public GameObject shockWavePrefab;         ///<value>Riferimento al prefab dell'onda d'urto per l'attacco speciale.</value>
 
     /*Dichiarazione costanti*/
     private const int firstJump = 1; ///<value>Definizione costante per l'indice di partenza del conteggio dei salti consecutivi.</value>
@@ -40,10 +41,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!Defend()) //Viene chiamato il metodo per la difesa
         {
-            Move();    //Viene chiamato il metodo per il movimento
-            Attack();  //Viene chiamato il metodo per l'attacco
-
-            SpecialAttack(); //Viene chiamato il metodo per il primo power-up
+            Move();   //Viene chiamato il metodo per il movimento
+            Attack(); //Viene chiamato il metodo per selezionare l'attacco
         }
 
         AdjustCollider(); //Correzione della posizione del collider
@@ -172,13 +171,33 @@ public class PlayerController : MonoBehaviour
     }
 
     /**
-     * <summary>Questo metodo gestisce l'attacco e le animazioni a esso associate.</summary>
+     * <summary>Questo metodo si occupa di selezionare l'attacco da effettuare.</summary>
      */
     private void Attack()
     {
         bool userInput = Input.GetButtonDown("Fire1"); //Dichiarazione e inizializzazione variabile per l'input dell'utente
 
-        animator.SetBool("attack", userInput); //Animazione del personaggio
+        if (userInput) //Si controlla che l'utente abbia premuto il tasto per attaccare
+        {
+            switch(powerup) //Si seleziona il tipo di azione da eseguire
+            {
+                case PowerUp.ShockWave:         //Si seleziona di attaccare col power-up
+                    powerup = PowerUp.Disabled; //Il power-up viene utilizzato
+                    SpecialAttack();            //Viene chiamato il metodo per il primo power-up
+                    break;                      //Interruzione del costrutto di selezione
+                default:                        //Si seleziona l'attacco semplice
+                    SimpleAttack();             //Viene chiamato il metodo per l'attacco
+                    break;                      //Interruzione del costrutto di selezione
+            }
+        }
+    }
+
+    /**
+     * <summary>Questo metodo gestisce l'attacco e le animazioni a esso associate.</summary>
+     */
+    private void SimpleAttack()
+    {
+        animator.SetBool("attack", true); //Animazione del personaggio
     }
 
     /**
@@ -186,13 +205,8 @@ public class PlayerController : MonoBehaviour
      */
     private void SpecialAttack()
     {
-        bool userInput = Input.GetKeyUp("x"); //Dichiarazione e inizializzazione variabile per l'input dell'utente
-
-        if (userInput) //Si controlla che l'utente abbia premuto il tasto per attivare il power-up
-        {
-            animator.SetTrigger("specialAttack"); //Animazione del personaggio
-            StartCoroutine("shockWaveEffect");    //Creazione dell'onda d'urto
-        }
+        animator.SetTrigger("specialAttack"); //Animazione del personaggio
+        StartCoroutine("shockWaveEffect");    //Creazione dell'onda d'urto
     }
 
     /**
