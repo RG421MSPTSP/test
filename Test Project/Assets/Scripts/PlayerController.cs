@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     /*Dichiarazione delle proprietà pubbliche*/
     public float gravity = -9.81f;             ///<value>Valore della forza di gravità del mondo.</value>
+    public float playerHeight = 1.05f;         ///<value>Altezza del collider del Character Controller.</value>
     public float walkingSpeed = 0.25f;         ///<value>Velocità durante lo spostamento.</value>
     public float runningSpeed = 5.0f;          ///<value>Velocità durante la corsa.</value>
     public float rotationSpeed = 720.0f;       ///<value>Velocità di rotazione.</value>
