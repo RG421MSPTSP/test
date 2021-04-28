@@ -186,6 +186,7 @@ public class PlayerController : MonoBehaviour
                     SpecialAttack();            //Viene chiamato il metodo per il primo power-up
                     break;                      //Interruzione del costrutto di selezione
                 default:                        //Si seleziona l'attacco semplice
+                    powerup = PowerUp.Disabled; //Qualsiasi altro power-up viene scartato
                     SimpleAttack();             //Viene chiamato il metodo per l'attacco
                     break;                      //Interruzione del costrutto di selezione
             }
@@ -197,7 +198,7 @@ public class PlayerController : MonoBehaviour
      */
     private void SimpleAttack()
     {
-        animator.SetBool("attack", true); //Animazione del personaggio
+        animator.SetTrigger("attack"); //Animazione del personaggio
     }
 
     /**
