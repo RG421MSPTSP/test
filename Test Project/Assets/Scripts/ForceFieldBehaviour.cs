@@ -15,7 +15,6 @@ public class ForceFieldBehaviour : MonoBehaviour
     /*Dichiarazione delle variabili d'istanza*/
     private GameObject player;         ///<value>Collegamento al player.</value>
     private Transform playerTransform; ///<value>Collegamento alla posizione del player.</value>
-    private float heightOffset = 0.0f; ///<value>Altezza per corretto posizionamento del campo rispetto al player.</value>
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +23,9 @@ public class ForceFieldBehaviour : MonoBehaviour
         playerTransform = player.transform;                  //Collegamento al player
 
         transform.localScale = Vector3.zero; //Inizializzazione dimensione del campo protettivo
+
+        /*Si comunica al player che il campo di forza è stato attivato*/
+        player.GetComponent<PlayerController>().powerup = PowerUp.ForceField;
 
         StartCoroutine("Deactivate"); //Viene avviata la coroutine per la futura distruzione del campo
     }
@@ -46,18 +48,21 @@ public class ForceFieldBehaviour : MonoBehaviour
         /*Si controlla che il campo sia svanito*/
         if (scaleFactor < 0.0f && transform.localScale.x <= 0.0f)
         {
+            /*Si comunica al player che il campo di forza è stato disattivato*/
+            player.GetComponent<PlayerController>().powerup = PowerUp.Disabled;
+
             Destroy(gameObject); //Distruzione del campo protettivo
         }
 
         transform.localScale = newScale; //Aggiornamento delle dimensioni del campo protettivo
-
-        /*Calcolo dell'altezza del player per corretto posizionamento del campo protettivo*/
-        heightOffset = player.GetComponent<PlayerController>().playerHeight / 2.0f;
     }
 
     // LateUpdate is called every frame
     private void LateUpdate()
     {
+        /*Dichiarazione costante dell'altezza del player per corretto posizionamento del campo protettivo*/
+        const float heightOffset = PlayerController.playerHeight / 2.0f;
+
         /*La posizione del campo protettivo viene aggiornata in base a quella del player*/
         transform.position = new Vector3(
             playerTransform.position.x,

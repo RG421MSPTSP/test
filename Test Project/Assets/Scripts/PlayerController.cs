@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
 {
     /*Dichiarazione delle proprietà pubbliche*/
     public float gravity = -9.81f;             ///<value>Valore della forza di gravità del mondo.</value>
-    public float playerHeight = 1.05f;         ///<value>Altezza del collider del Character Controller.</value>
     public float walkingSpeed = 0.25f;         ///<value>Velocità durante lo spostamento.</value>
     public float runningSpeed = 5.0f;          ///<value>Velocità durante la corsa.</value>
     public float rotationSpeed = 720.0f;       ///<value>Velocità di rotazione.</value>
@@ -17,6 +16,9 @@ public class PlayerController : MonoBehaviour
     public float jumpStrength = 3.5f;          ///<value>Forza del salto.</value>
     public PowerUp powerup = PowerUp.Disabled; ///<value>Power-up posseduto.</value>
     public GameObject shockWavePrefab;         ///<value>Riferimento al prefab dell'onda d'urto per l'attacco speciale.</value>
+
+    /*Dichiarazione costanti pubbliche*/
+    public const float playerHeight = 1.05f; ///<value>Altezza del collider del Character Controller.</value>
 
     /*Dichiarazione costanti*/
     private const int firstJump = 1; ///<value>Definizione costante per l'indice di partenza del conteggio dei salti consecutivi.</value>
@@ -40,12 +42,20 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!Defend()) //Viene chiamato il metodo per la difesa
+        if (powerup == PowerUp.ForceField) //Si controlla che il player sia all'interno del campo di forza
+        {
+            Move(); //Viene chiamato il metodo per il movimento
+        }
+        else if (!Defend()) //Viene chiamato il metodo per la difesa
         {
             Move();   //Viene chiamato il metodo per il movimento
             Attack(); //Viene chiamato il metodo per selezionare l'attacco
         }
+    }
 
+    // LateUpdate is called every frame
+    private void LateUpdate()
+    {
         AdjustCollider(); //Correzione della posizione del collider
     }
 
@@ -272,13 +282,16 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(waitingTime); //L'onda d'urto non viene mostrata subito
 
-        /*Viene istanziato il prefab dell'onda d'urto*/
-        GameObject specialEffect = Instantiate(
+        if (shockWavePrefab != null) //Si controlla il collegamento al prefab
+        {
+            /*Viene istanziato il prefab dell'onda d'urto*/
+            GameObject specialEffect = Instantiate(
 
-            shockWavePrefab,
-            new Vector3(transform.position.x, transform.position.y + wavePosition, transform.position.z),
-            Quaternion.identity
+                shockWavePrefab,
+                new Vector3(transform.position.x, transform.position.y + wavePosition, transform.position.z),
+                Quaternion.identity
 
-        ) as GameObject;
+            ) as GameObject;
+        }
     }
 }
