@@ -1,3 +1,7 @@
+#Ignoro la cartella che contiene gli assets dei livelli
+/[Aa]ssets/Environment/
+/[Aa]ssets/Environment.meta
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
