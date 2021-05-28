@@ -7,11 +7,12 @@ In questa sezione elenchiamo le cartelle( percorso intero compreso) contenenti g
   
   -Livello5:
   
-    https://assetstore.unity.com/packages/3d/environments/sci-fi/megapoly-art-vintage-control-room-190538
+   [sala di controllo](https://assetstore.unity.com/packages/3d/environments/sci-fi/megapoly-art-vintage-control-room-190538)
     
-    https://assetstore.unity.com/packages/3d/environments/sci-fi/snaps-prototype-sci-fi-industrial-136759
+   [parti nave1](https://assetstore.unity.com/packages/3d/environments/sci-fi/snaps-prototype-sci-fi-industrial-136759)
+   --> **_Attenzione a questo package! Vi consiglio di non importare la sezione _"Scripts"_ in quanto crea un infinity loop di importazione che vi costringe a chiudere l'editor_**
     
-    https://assetstore.unity.com/packages/3d/environments/sci-fi/sci-fi-styled-modular-pack-82913
+   [parti nave2](https://assetstore.unity.com/packages/3d/environments/sci-fi/sci-fi-styled-modular-pack-82913)
     
 ***--- Si consiglia inoltre di creare le cartelle nel seguente ordine:***
 
