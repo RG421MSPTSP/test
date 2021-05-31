@@ -3,6 +3,8 @@ using System.Collections.Generic; //Viene importato lo spazio dei nomi per l'uti
 using UnityEngine;                //Viene importato lo spazio dei nomi per gli oggetti principali di Unity
 using UnityEngine.AI;             //Viene importato lo spazio dei nomi per l'intelligenza artificiale di Unity
 
+///<summary>Questa classe si occupa del comportamento dello spiritello.</summary>
+[RequireComponent(typeof(NavMeshAgent))]
 public class MagicalSpiritController : MonoBehaviour
 {
     /*Dichiarazione delle variabili pubbliche*/

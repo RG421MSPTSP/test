@@ -998,7 +998,7 @@ MonoBehaviour:
   totalJump: 2
   jumpStrength: 3.5
   powerup: 0
-  shockWavePrefab: {fileID: 1714681308540598, guid: 5cbc537826220e04592d5a41a0dd985f, type: 3}
+  shockWavePrefab: {fileID: 100000, guid: 611050965a7b66143b84e5b62ae17405, type: 3}
 --- !u!143 &1131548283
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1335,7 +1335,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239530661}
-  m_LocalRotation: {x: 0.09383002, y: -0.000000017130471, z: 0.000000001614475, w: 0.99558824}
+  m_LocalRotation: {x: 0.09383002, y: 0.000000017130471, z: -0.000000001614475, w: 0.99558824}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

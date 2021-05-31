@@ -5,6 +5,7 @@ using UnityEngine;                //Viene importato lo spazio dei nomi per gli o
 /**
  * <summary>Contiene i metodi per il movimento e le azioni del player.</summary>
  */
+[RequireComponent(typeof(CharacterController)), RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     /*Dichiarazione delle proprietà pubbliche*/
@@ -226,49 +227,56 @@ public class PlayerController : MonoBehaviour
      */
     private void AdjustCollider()
     {
+        const int animationsLayer = 0;  //Definizione costante per il livello in cui si trovano le animazioni
+        const int firstInformation = 0; //Definizione costante per ottenere il nome dell'animazione
+
         /*Dichiarazione e inizializzazione variabile per contenere le informazioni sull'animazione corrente*/
-        AnimatorClipInfo[] currentAnimation = animator.GetCurrentAnimatorClipInfo(0);
+        AnimatorClipInfo[] currentAnimation = animator.GetCurrentAnimatorClipInfo(animationsLayer);
 
-        switch (currentAnimation[0].clip.name) //Selezione dei valori del collider in base all'animazione
+        if (currentAnimation.Length > firstInformation) //Controllo validità informazioni
         {
-            /*Si selezionano i valori del collider per l'animazione dell'attacco semplice*/
-            case "Attack01":
-                controller.radius = 0.68f; //Aggiornamento raggio collider
+            /*Selezione dei valori del collider in base all'animazione*/
+            switch (currentAnimation[firstInformation].clip.name)
+            {
+                /*Si selezionano i valori del collider per l'animazione dell'attacco semplice*/
+                case "Attack01":
+                    controller.radius = 0.68f; //Aggiornamento raggio collider
 
-                /*Aggiornamento posizione collider*/
-                controller.center = new Vector3(
-                    -0.15f,
-                    controller.radius + controller.skinWidth,
-                    0.12f
-                );
+                    /*Aggiornamento posizione collider*/
+                    controller.center = new Vector3(
+                        -0.15f,
+                        controller.radius + controller.skinWidth,
+                        0.12f
+                    );
 
-                break; //Interruzione del costrutto di selezione
+                    break; //Interruzione del costrutto di selezione
 
-            /*Si selezionano i valori del collider per l'animazione dell'attacco speciale*/
-            case "Attack02":
-                controller.radius = 0.74f; //Aggiornamento raggio collider
+                /*Si selezionano i valori del collider per l'animazione dell'attacco speciale*/
+                case "Attack02":
+                    controller.radius = 0.74f; //Aggiornamento raggio collider
 
-                /*Aggiornamento posizione collider*/
-                controller.center = new Vector3(
-                    -0.07f,
-                    controller.radius + controller.skinWidth,
-                    0.08f
-                );
+                    /*Aggiornamento posizione collider*/
+                    controller.center = new Vector3(
+                        -0.07f,
+                        controller.radius + controller.skinWidth,
+                        0.08f
+                    );
 
-                break; //Interruzione del costrutto di selezione
+                    break; //Interruzione del costrutto di selezione
 
-            /*Si selezionano i valori del collider per tutte le altre animazioni*/
-            default:
-                controller.radius = 0.65f; //Aggiornamento raggio collider
+                /*Si selezionano i valori del collider per tutte le altre animazioni*/
+                default:
+                    controller.radius = 0.65f; //Aggiornamento raggio collider
 
-                /*Aggiornamento posizione collider*/
-                controller.center = new Vector3(
-                    0.0f,
-                    controller.radius + controller.skinWidth,
-                    0.0f
-                );
+                    /*Aggiornamento posizione collider*/
+                    controller.center = new Vector3(
+                        0.0f,
+                        controller.radius + controller.skinWidth,
+                        0.0f
+                    );
 
-                break; //Interruzione del costrutto di selezione
+                    break; //Interruzione del costrutto di selezione
+            }
         }
     }
 
