@@ -20,12 +20,19 @@ public class ForceFieldBehaviour : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player"); //Collegamento al player
-        playerTransform = player.transform;                  //Collegamento al player
+
+        if (player != null) //Si controlla la validità del riferimento
+        {
+            playerTransform = player.transform; //Si ottiene la componente Transform del player
+        }
 
         transform.localScale = Vector3.zero; //Inizializzazione dimensione del campo protettivo
 
-        /*Si comunica al player che il campo di forza è stato attivato*/
-        player.GetComponent<PlayerController>().powerup = PowerUp.ForceField;
+        if (player != null) //Si controlla la validità del riferimento
+        {
+            /*Si comunica al player che il campo di forza è stato attivato*/
+            player.GetComponent<PlayerController>().powerup = PowerUp.ForceField;
+        }
 
         StartCoroutine("Deactivate"); //Viene avviata la coroutine per la futura distruzione del campo
     }
@@ -48,8 +55,11 @@ public class ForceFieldBehaviour : MonoBehaviour
         /*Si controlla che il campo sia svanito*/
         if (scaleFactor < 0.0f && transform.localScale.x <= 0.0f)
         {
-            /*Si comunica al player che il campo di forza è stato disattivato*/
-            player.GetComponent<PlayerController>().powerup = PowerUp.Disabled;
+            if (player != null) //Si controlla la validità del riferimento
+            {
+                /*Si comunica al player che il campo di forza è stato disattivato*/
+                player.GetComponent<PlayerController>().powerup = PowerUp.Disabled;
+            }
 
             Destroy(gameObject); //Distruzione del campo protettivo
         }
@@ -63,12 +73,15 @@ public class ForceFieldBehaviour : MonoBehaviour
         /*Dichiarazione costante dell'altezza del player per corretto posizionamento del campo protettivo*/
         const float heightOffset = PlayerController.playerHeight / 2.0f;
 
-        /*La posizione del campo protettivo viene aggiornata in base a quella del player*/
-        transform.position = new Vector3(
-            playerTransform.position.x,
-            playerTransform.position.y + heightOffset,
-            playerTransform.position.z
-        );
+        if (playerTransform != null) //Controllo validità riferimento
+        {
+            /*La posizione del campo protettivo viene aggiornata in base a quella del player*/
+            transform.position = new Vector3(
+                playerTransform.position.x,
+                playerTransform.position.y + heightOffset,
+                playerTransform.position.z
+            );
+        }
     }
 
     /**

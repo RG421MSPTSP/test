@@ -22,6 +22,7 @@ public class MagicalSpiritController : MonoBehaviour
     /*Dichiarazione delle variabili d'istanza*/
     private NavMeshAgent navigationMeshAgent; ///<value>Componente Navigation Mesh Agent dell'oggetto.</value>
     private GameObject player;                ///<value>Riferimento al player.</value>
+    private Transform playerTransform;        ///<value>Riferimento al componente Transform del player.</value>
     private Transform target;                 ///<value>Componente Transform dell'oggetto da seguire.</value>
     private bool deactivation = false;        ///<value>Variabile di controllo per la coroutine per terminare il power-up.</value>
     private bool sphereThrow = true;          ///<value>Variabile di controllo per il prossimo lancio della sfera di luce.</value>
@@ -31,6 +32,11 @@ public class MagicalSpiritController : MonoBehaviour
     {
         navigationMeshAgent = GetComponent<NavMeshAgent>();  //Inizializzazione Navigation Mesh Agent
         player = GameObject.FindGameObjectWithTag("Player"); //Aggiornamento del riferimento al player
+
+        if (player != null) //Controllo validità riferimento
+        {
+            playerTransform = player.transform; //Si ottiene la componente Transform del player
+        }
     }
 
     // Update is called once per frame
@@ -114,12 +120,12 @@ public class MagicalSpiritController : MonoBehaviour
     private void TargetCorrection()
     {
         /*Si controlla che non ci sia alcun target da seguire*/
-        if (target == null && powerup != PowerUp.ForceField)
+        if (target == null && playerTransform != null && powerup != PowerUp.ForceField)
         {
             /*Ripristino della distanza tra lo spirito e il player*/
             navigationMeshAgent.stoppingDistance = distanceFromPlayer;
 
-            target = player.transform; //Ripristino del target
+            target = playerTransform; //Ripristino del target
         }
     }
 
@@ -152,7 +158,7 @@ public class MagicalSpiritController : MonoBehaviour
 
         /*Si controllano la correttezza del riferimento al prefab, la possibilità di lanciare una
           nuova sfera di luce e che l'obiettivo non sia il player*/
-        if (magicSpherePrefab != null && sphereThrow && target != player.transform)
+        if (magicSpherePrefab != null && sphereThrow && target != playerTransform)
         {
             /*Viene istanziato il prefab per la sfera di luce*/
             instantiatedSphere = Instantiate(
