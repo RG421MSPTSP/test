@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private float previousY = -1.0f;        ///<value>Dichiarazione e inizializzazione posizione in aria.</value>
     private float previousZ = -1.0f;        ///<value>Dichiarazione e inizializzazione posizione a terra.</value>
     private int currentJump = firstJump;    ///<value>Dichiarazione e inizializzazione numero di salti consecutivi.</value>
+    private bool die;                       ///<value>Dichiarazione variabile di controllo per la morte.</value>
 
     // Start is called before the first frame update
     void Start()
@@ -43,14 +44,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (powerup == PowerUp.ForceField) //Si controlla che il player sia all'interno del campo di forza
+        if (!die) //Si controlla che il personaggio sia ancora in vita
         {
-            Move(); //Viene chiamato il metodo per il movimento
-        }
-        else if (!Defend()) //Viene chiamato il metodo per la difesa
-        {
-            Move();   //Viene chiamato il metodo per il movimento
-            Attack(); //Viene chiamato il metodo per selezionare l'attacco
+            if (powerup == PowerUp.ForceField) //Si controlla che il player sia all'interno del campo di forza
+            {
+                Move(); //Viene chiamato il metodo per il movimento
+            }
+            else if (!Defend()) //Viene chiamato il metodo per la difesa
+            {
+                Move();   //Viene chiamato il metodo per il movimento
+                Attack(); //Viene chiamato il metodo per selezionare l'attacco
+            }
         }
     }
 
@@ -223,6 +227,31 @@ public class PlayerController : MonoBehaviour
     }
 
     /**
+     * <summary>Questo metodo si occupa dell'animazione del colpo subito.</summary>
+     */
+    public void Damage()
+    {
+        animator.SetTrigger("damage"); //Animazione del personaggio
+    }
+
+    /**
+     * <summary>Questo metodo si occupa del personaggio stordito.</summary>
+     */
+    public void Dizzy()
+    {
+        animator.SetTrigger("dizzy"); //Animazione del personaggio
+    }
+
+    /**
+     * <summary>Questo metodo si occupa della morte del personaggio.</summary>
+     */
+    public void Die()
+    {
+        die = true;                 //Aggiornamento variabile di controllo per la morte
+        animator.SetTrigger("die"); //Animazione del personaggio
+    }
+
+    /**
      * <summary>Questo metodo si occupa di correggere la posizione del collider del Character Controller.</summary>
      */
     private void AdjustCollider()
@@ -260,6 +289,43 @@ public class PlayerController : MonoBehaviour
                         -0.07f,
                         controller.radius + controller.skinWidth,
                         0.08f
+                    );
+
+                    break; //Interruzione del costrutto di selezione
+
+                case "GetHit":
+                    controller.radius = 0.78f; //Aggiornamento raggio collider
+
+                    /*Aggiornamento posizione collider*/
+                    controller.center = new Vector3(
+                        0.0f,
+                        controller.radius + controller.skinWidth,
+                        -0.06f
+                    );
+
+                    break; //Interruzione del costrutto di selezione
+
+                case "Dizzy":
+                    controller.radius = 0.75f; //Aggiornamento raggio collider
+
+                    /*Aggiornamento posizione collider*/
+                    controller.center = new Vector3(
+                        0.05f,
+                        controller.radius + controller.skinWidth,
+                        0.0f
+                    );
+
+                    break; //Interruzione del costrutto di selezione
+
+                case "Die":
+                case "DieRecover":
+                    controller.radius = 0.65f; //Aggiornamento raggio collider
+
+                    /*Aggiornamento posizione collider*/
+                    controller.center = new Vector3(
+                        0.0f,
+                        controller.radius + controller.skinWidth,
+                        -0.75f
                     );
 
                     break; //Interruzione del costrutto di selezione
